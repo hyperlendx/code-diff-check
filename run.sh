@@ -1,5 +1,5 @@
 echo "install dependencies"
-npm init -y && npm install --save-dev prettier prettier-plugin-solidity
+npm init -y >/dev/null && npm install --save-dev prettier prettier-plugin-solidity
 
 echo "remove existing code"
 rm -rf aave-v3-core
@@ -37,7 +37,7 @@ npx prettier --write --plugin=prettier-plugin-solidity 'hyperlend-core/contracts
 mv .gitignore-temp .gitignore
 
 echo "comparing files in contracts/"
-diff -r -y --suppress-common-lines aave-v3-core/contracts hyperlend-core/contracts > diffs-core.txt
+diff --recursive --side-by-side --suppress-common-lines aave-v3-core/contracts hyperlend-core/contracts > diffs-core.txt
 
 echo "core diffs have been stored in diffs-core.txt"
 
@@ -54,6 +54,7 @@ git clone https://github.com/hyperlendx/hyperlend-core-isolated
 #remove comments
 find fraxlend/src/contracts -type f -name "*.sol" -exec sed -i '/^\/\//d' {} +
 find hyperlend-core-isolated/contracts -type f -name "*.sol" -exec sed -i '/^\/\//d' {} +
+rm fraxlend/.prettierrc
 
 #temp rename .gitignore, so prettier works
 mv .gitignore .gitignore-temp
@@ -66,7 +67,6 @@ npx prettier --write --plugin=prettier-plugin-solidity 'hyperlend-core-isolated/
 mv .gitignore-temp .gitignore
 
 #rename files to match hyperlend
-mkdir fraxlend/contracts
 mv fraxlend/src/contracts/FraxlendPair.sol fraxlend/src/contracts/HyperlendPair.sol
 mv fraxlend/src/contracts/FraxlendPairAccessControl.sol fraxlend/src/contracts/HyperlendPairAccessControl.sol
 mv fraxlend/src/contracts/FraxlendPairAccessControlErrors.sol fraxlend/src/contracts/HyperlendPairAccessControlErrors.sol
@@ -81,6 +81,6 @@ mv fraxlend/src/contracts/interfaces/IFraxlendWhitelist.sol fraxlend/src/contrac
 mv fraxlend/src/contracts/ fraxlend/contracts
 
 echo "comparing files in contracts/"
-diff -r -y --suppress-common-lines fraxlend/contracts hyperlend-core-isolated/contracts > diffs-isolated.txt
+diff --recursive --side-by-side --suppress-common-lines fraxlend/contracts hyperlend-core-isolated/contracts > diffs-isolated.txt
 
 echo "core-isolated diffs have been stored in diffs-isolated.txt"
