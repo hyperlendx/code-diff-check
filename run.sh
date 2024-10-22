@@ -1,5 +1,5 @@
 echo "install dependencies"
-npm install --save-dev prettier prettier-plugin-solidity
+npm init -y && npm install --save-dev prettier prettier-plugin-solidity
 
 echo "remove existing code"
 rm -rf aave-v3-core
@@ -7,7 +7,9 @@ rm -rf fraxlend
 rm -rf hyperlend-core
 rm -rf hyperlend-core-isolated
 
+### --------------
 ### Core pools
+### --------------
 
 echo "cloning aave-v3-core"
 git clone https://github.com/aave/aave-v3-core
@@ -39,7 +41,9 @@ diff -r -y --suppress-common-lines aave-v3-core/contracts hyperlend-core/contrac
 
 echo "core diffs have been stored in diffs-core.txt"
 
+### --------------
 ### Isolated pools
+### --------------
 
 echo "cloning fraxlend"
 git clone https://github.com/FraxFinance/fraxlend/
@@ -80,6 +84,3 @@ echo "comparing files in contracts/"
 diff -r -y --suppress-common-lines fraxlend/contracts hyperlend-core-isolated/contracts > diffs-isolated.txt
 
 echo "core-isolated diffs have been stored in diffs-isolated.txt"
-
-#don't exit
-read

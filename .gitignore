@@ -6,3 +6,5 @@ diffs-isolated.txt
 .prettierrc
 hyperlend-core-isolated/
 fraxlend/
+package.json
+package-lock.json
