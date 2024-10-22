@@ -46,13 +46,14 @@ git clone https://github.com/hyperlendx/hyperlend-core-isolated
 
 #remove comments
 find fraxlend/src/contracts -type f -name "*.sol" -exec sed -i '/^\/\//d' {} +
-find hyperlend-core-isolated/src/contracts -type f -name "*.sol" -exec sed -i '/^\/\//d' {} +
+find hyperlend-core-isolated/contracts -type f -name "*.sol" -exec sed -i '/^\/\//d' {} +
 
 echo "run prettier"
 npx prettier --write --plugin=prettier-plugin-solidity 'fraxlend/src/contracts/**/*.sol'
-npx prettier --write --plugin=prettier-plugin-solidity 'hyperlend-core-isolated/src/contracts/**/*.sol'
+npx prettier --write --plugin=prettier-plugin-solidity 'hyperlend-core-isolated/contracts/**/*.sol'
 
 #rename files to match hyperlend
+mkdir fraxlend/contracts
 mv fraxlend/src/contracts/FraxlendPair.sol fraxlend/src/contracts/HyperlendPair.sol
 mv fraxlend/src/contracts/FraxlendPairAccessControl.sol fraxlend/src/contracts/HyperlendPairAccessControl.sol
 mv fraxlend/src/contracts/FraxlendPairAccessControlErrors.sol fraxlend/src/contracts/HyperlendPairAccessControlErrors.sol
@@ -64,11 +65,15 @@ mv fraxlend/src/contracts/FraxlendWhitelist.sol fraxlend/src/contracts/Hyperlend
 mv fraxlend/src/contracts/interfaces/IFraxlendPair.sol fraxlend/src/contracts/interfaces/IHyperlendPair.sol
 mv fraxlend/src/contracts/interfaces/IFraxlendPairRegistry.sol fraxlend/src/contracts/interfaces/IHyperlendPairRegistry.sol
 mv fraxlend/src/contracts/interfaces/IFraxlendWhitelist.sol fraxlend/src/contracts/interfaces/IHyperlendWhitelist.sol
+mv fraxlend/src/contracts/ fraxlend/contracts
 
 echo "comparing files in contracts/"
-diff -r -y --suppress-common-lines fraxlend/src/contracts hyperlend-core-isolated/src/contracts > diffs-isolated.txt
+diff -r -y --suppress-common-lines fraxlend/contracts hyperlend-core-isolated/contracts > diffs-isolated.txt
 
 echo "core-isolated diffs have been stored in diffs-isolated.txt"
 
 #restore gitignore
 mv .gitignore-temp .gitignore
+
+#don't exit
+read
