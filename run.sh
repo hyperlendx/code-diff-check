@@ -1,6 +1,3 @@
-#temp rename .gitignore, so prettier works
-mv .gitignore .gitignore-temp
-
 echo "install dependencies"
 npm install --save-dev prettier prettier-plugin-solidity
 
@@ -27,9 +24,15 @@ echo "remove default prettier config"
 rm aave-v3-core/.prettierrc
 mv hyperlend-core/.prettierrc .prettierrc 
 
+#temp rename .gitignore, so prettier works
+mv .gitignore .gitignore-temp
+
 echo "run prettier"
 npx prettier --write --plugin=prettier-plugin-solidity 'aave-v3-core/contracts/**/*.sol'
 npx prettier --write --plugin=prettier-plugin-solidity 'hyperlend-core/contracts/**/*.sol'
+
+#restore gitignore
+mv .gitignore-temp .gitignore
 
 echo "comparing files in contracts/"
 diff -r -y --suppress-common-lines aave-v3-core/contracts hyperlend-core/contracts > diffs-core.txt
@@ -48,9 +51,15 @@ git clone https://github.com/hyperlendx/hyperlend-core-isolated
 find fraxlend/src/contracts -type f -name "*.sol" -exec sed -i '/^\/\//d' {} +
 find hyperlend-core-isolated/contracts -type f -name "*.sol" -exec sed -i '/^\/\//d' {} +
 
+#temp rename .gitignore, so prettier works
+mv .gitignore .gitignore-temp
+
 echo "run prettier"
 npx prettier --write --plugin=prettier-plugin-solidity 'fraxlend/src/contracts/**/*.sol'
 npx prettier --write --plugin=prettier-plugin-solidity 'hyperlend-core-isolated/contracts/**/*.sol'
+
+#restore gitignore
+mv .gitignore-temp .gitignore
 
 #rename files to match hyperlend
 mkdir fraxlend/contracts
@@ -71,9 +80,6 @@ echo "comparing files in contracts/"
 diff -r -y --suppress-common-lines fraxlend/contracts hyperlend-core-isolated/contracts > diffs-isolated.txt
 
 echo "core-isolated diffs have been stored in diffs-isolated.txt"
-
-#restore gitignore
-mv .gitignore-temp .gitignore
 
 #don't exit
 read
